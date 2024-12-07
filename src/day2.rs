@@ -13,12 +13,12 @@ fn is_safeb(levels: &[i64]) -> bool {
     for i in 0..levels.len() {
         let mut x = Vec::new();
         x.extend_from_slice(&levels[0..i]);
-        x.extend_from_slice(&levels[i+1..]);
-        if is_safe( &x) {
+        x.extend_from_slice(&levels[i + 1..]);
+        if is_safe(&x) {
             return true;
         }
     }
-    return false;
+    false
 }
 
 pub fn run() {

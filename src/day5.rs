@@ -14,7 +14,7 @@ fn is_correct(rules: &Vec<(i32, i32)>, update: &[i32]) -> bool {
             }
         }
     }
-    return true;
+    true
 }
 
 pub fn run() {
@@ -27,7 +27,7 @@ pub fn run() {
 
     let mut it = lines.iter();
     while let Some(x) = it.next() {
-        if x == "" {
+        if x.is_empty() {
             break;
         }
         let_scan!(x; (let a: i32, "|", let b: i32));
@@ -40,18 +40,18 @@ pub fn run() {
         let_scan!(l; ([let val2: i32],+));
         let mut val = val2;
         if is_correct(&rules, &val) {
-            res += val[val.len()/2];
+            res += val[val.len() / 2];
         } else {
             val.sort_by(|a, b| {
-                if rules.iter().find(|x| **x == (*a,*b)).is_some() {
+                if rules.iter().any(|x| *x == (*a, *b)) {
                     Ordering::Less
-                } else if rules.iter().find(|x| **x == (*b,*a)).is_some() {
+                } else if rules.iter().any(|x| *x == (*b, *a)) {
                     Ordering::Greater
                 } else {
                     Ordering::Equal
                 }
             });
-            res2 += val[val.len()/2];
+            res2 += val[val.len() / 2];
         }
     }
 

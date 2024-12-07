@@ -1,22 +1,22 @@
-use std::{collections::HashSet, hash::Hash};
+use std::collections::HashSet;
 
 use crate::utils::read_lines;
+
+const MOVES: [(i64, i64); 4] = [(-1, 0), (0, 1), (1, 0), (0, -1)];
 
 fn get(map: &[Vec<char>], x: i64, y: i64) -> char {
     if x < 0 || y < 0 {
         return '0';
     }
     map.get(x as usize)
-        .map(|l| l.get(y as usize))
-        .flatten()
-        .map(|c| *c as char)
+        .and_then(|l| l.get(y as usize))
+        .copied()
         .unwrap_or('0')
 }
 
 fn has_loop(lines: &[Vec<char>], s: usize, p: (i64, i64)) -> bool {
     // let mut visited = v.clone();
     let mut visited = HashSet::new();
-    let MOVES: Vec<(i64, i64)> = vec![(-1, 0), (0, 1), (1, 0), (0, -1)];
     let mut step_idx = s;
     let mut pos = p;
 
@@ -26,7 +26,7 @@ fn has_loop(lines: &[Vec<char>], s: usize, p: (i64, i64)) -> bool {
         }
         visited.insert((pos, step_idx));
         let new_pos = (pos.0 + MOVES[step_idx].0, pos.1 + MOVES[step_idx].1);
-        let c = get(&lines, new_pos.0, new_pos.1);
+        let c = get(lines, new_pos.0, new_pos.1);
         if c == '#' {
             step_idx = (step_idx + 1) % MOVES.len();
             continue;
@@ -47,10 +47,9 @@ pub fn run() {
 
     let mut pos: (i64, i64) = (0, 0);
     let mut step_idx = 0;
-    let MOVES: Vec<(i64, i64)> = vec![(-1, 0), (0, 1), (1, 0), (0, -1)];
-    for i in 0..lines.len() {
-        for j in 0..lines[i].len() {
-            if lines[i][j] as char == '^' {
+    for (i, _) in lines.iter().enumerate() {
+        for (j, elem) in lines[i].iter().enumerate() {
+            if *elem == '^' {
                 pos = (i as i64, j as i64);
             }
         }
@@ -81,5 +80,4 @@ pub fn run() {
 
     println!("Day6.1: {}", visited.len());
     println!("Day6.2: {}", res.len());
-
 }
