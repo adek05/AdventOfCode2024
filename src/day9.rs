@@ -16,10 +16,12 @@ enum Block {
 }
 
 fn debug(filesystem: &[Block]) {
-    filesystem.iter().for_each(|x| {
-        match x {
-            Block::File(x, _) => { print!("{}", x)}
-            Block::Empty => { print!(".") }
+    filesystem.iter().for_each(|x| match x {
+        Block::File(x, _) => {
+            print!("{}", x)
+        }
+        Block::Empty => {
+            print!(".")
         }
     });
     println!("");
@@ -50,7 +52,7 @@ pub fn run() {
         .flatten()
         .collect();
 
-    let mut tail_idx = filesystem.len()-1;
+    let mut tail_idx = filesystem.len() - 1;
     let mut idx = 0;
     let mut res = 0;
     while idx <= tail_idx {
@@ -59,36 +61,31 @@ pub fn run() {
                 res += x * idx;
                 idx += 1;
             }
-            Block::Empty => {
-                match filesystem[tail_idx] {
-                    Block::File(x,_) => {
-                        res += x * idx;
-                        idx += 1;
-                        tail_idx -= 1;
-                    }
-                    Block::Empty => {
-                        tail_idx -= 1;
-                    }
-
+            Block::Empty => match filesystem[tail_idx] {
+                Block::File(x, _) => {
+                    res += x * idx;
+                    idx += 1;
+                    tail_idx -= 1;
                 }
-            }
+                Block::Empty => {
+                    tail_idx -= 1;
+                }
+            },
         }
     }
     println!("Day 9.1: {}", res);
 
     idx = 0;
-    tail_idx = filesystem.len() -1;
-
-    debug(&filesystem);
+    tail_idx = filesystem.len() - 1;
     while idx <= tail_idx {
         match filesystem[tail_idx] {
-            Block::Empty => { tail_idx -= 1}
+            Block::Empty => tail_idx -= 1,
             Block::File(id, len) => {
                 if tail_idx < len {
                     break;
                 }
-                for i in 0..tail_idx-len {
-                    if filesystem[i..i+len].iter().all(|x| x == &Block::Empty) {
+                for i in 0..tail_idx - len {
+                    if filesystem[i..i + len].iter().all(|x| x == &Block::Empty) {
                         for x in 0..len {
                             filesystem[i + x] = Block::File(id, len);
                             filesystem[tail_idx - x] = Block::Empty;
@@ -100,11 +97,17 @@ pub fn run() {
             }
         }
     }
-    println!("Day 9.2: {}", 
-    filesystem.iter().enumerate().map(|(pos, block)| {
-        match block {
-            Block::Empty => {0}
-            Block::File(x, _) => { x * pos }
-        }
-    }).sum::<usize>());
+    println!(
+        "Day 9.2: {}",
+        filesystem
+            .iter()
+            .enumerate()
+            .map(|(pos, block)| {
+                match block {
+                    Block::Empty => 0,
+                    Block::File(x, _) => x * pos,
+                }
+            })
+            .sum::<usize>()
+    );
 }
