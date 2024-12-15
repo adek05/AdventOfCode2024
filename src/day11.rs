@@ -1,6 +1,5 @@
 use std::collections::HashMap;
 
-use crate::utils::get;
 use crate::utils::read_lines;
 
 fn blink(pebble: u64) -> Vec<u64> {

@@ -1,5 +1,3 @@
-use std::fs::File;
-
 use crate::utils::read_lines;
 
 fn get_file_id(idx: i64) -> i64 {
