@@ -1,3 +1,3 @@
 fn main() {
-    aoc24::day13::run();
+    aoc24::day14::run();
 }
